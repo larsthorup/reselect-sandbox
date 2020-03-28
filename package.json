@@ -1,0 +1,28 @@
+{
+  "name": "reselect-sandbox",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "node src/index.js",
+    "travis": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larsthorup/reselect-sandbox.git"
+  },
+  "keywords": [],
+  "author": "Lars Thorup <lars@zealake.com> (https://www.zealake.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/larsthorup/reselect-sandbox/issues"
+  },
+  "homepage": "https://github.com/larsthorup/reselect-sandbox#readme",
+  "dependencies": {
+    "ramda": "^0.27.0",
+    "reselect": "^4.0.0"
+  },
+  "prettier": {
+    "singleQuote": true
+  }
+}
