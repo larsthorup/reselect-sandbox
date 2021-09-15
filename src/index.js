@@ -82,3 +82,5 @@ assert.notStrictEqual(contactIdList4Cached, contactIdList1Cached);
 
 const f = cacheResultOf((xs, ys) => xs.concat(ys).sort());
 assert.strictEqual(f([1, 2, 3], [4, 5, 6]), f([1, 2], [3, 4, 5, 6]));
+
+console.log('All tests passed.')

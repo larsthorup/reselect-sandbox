@@ -1,9 +1,9 @@
 const R = require('ramda');
 
-const cacheResultOf = fn => {
+const cacheResultOf = (selector) => {
   let cache = null;
   return (...args) => {
-    const result = fn.apply(null, args);
+    const result = selector.apply(null, args);
     if (R.equals(cache, result)) {
       return cache;
     } else {
