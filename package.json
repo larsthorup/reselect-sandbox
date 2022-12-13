@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/larsthorup/reselect-sandbox#readme",
   "dependencies": {
-    "ramda": "^0.27.0",
-    "reselect": "^4.0.0"
+    "ramda": "^0.28.0",
+    "reselect": "4.1"
   },
   "prettier": {
     "singleQuote": true
