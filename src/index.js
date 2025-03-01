@@ -1,34 +1,37 @@
 const assert = require('assert');
 const R = require('ramda');
 const { createSelector } = require('reselect');
-
-const cacheResultOf = require('./cacheResultOf');
+const { shallowEqual } = require('react-redux');
 
 const selectContactIdList = createSelector(
-  state => state.contact,
-  contact => {
+  (state) => state.contact,
+  (contact) => {
     return R.sortBy(R.prop('name'), R.values(contact)).map(R.prop('id'));
   }
 );
 
-const selectContactIdListCached = cacheResultOf(
-  createSelector(
-    state => state.contact,
-    contact => {
-      return R.sortBy(R.prop('name'), R.values(contact)).map(R.prop('id'));
-    }
-  )
+const selectContactIdListCached = createSelector(
+  (state) => state.contact,
+  (contact) => {
+    return R.sortBy(R.prop('name'), R.values(contact)).map(R.prop('id'));
+  },
+  {
+    memoizeOptions: { 
+      // Note: return previous result if the new result is equal to previous result
+      resultEqualityCheck: shallowEqual 
+    },
+  }
 );
 
 const state1 = {
   contact: {
-    '1': { id: '1', name: 'Lars Christensen' },
-    '2': { id: '2', name: 'Kristian Dupont' },
-    '3': { id: '3', name: 'Sonny Korte' }
+    1: { id: '1', name: 'Lars Christensen' },
+    2: { id: '2', name: 'Kristian Dupont' },
+    3: { id: '3', name: 'Sonny Korte' },
   },
   country: {
-    '8': { id: '8', name: 'Denmark' }
-  }
+    8: { id: '8', name: 'Denmark' },
+  },
 };
 
 // When calling selector
@@ -65,7 +68,7 @@ const contactIdList3Cached = selectContactIdListCached(state3);
 assert.deepEqual(contactIdList3, contactIdList1);
 assert.deepEqual(contactIdList3Cached, contactIdList1Cached);
 
-// But then no-caching select no longer returns the SAME value (because the array got recomputed)
+// But the no-caching select no longer returns the SAME value (because the array got recomputed)
 assert.notStrictEqual(contactIdList3, contactIdList1);
 
 // But the CACHING select still returns the SAME value (because of the equality check)
@@ -80,7 +83,4 @@ const contactIdList4Cached = selectContactIdListCached(state4);
 assert.notStrictEqual(contactIdList4, contactIdList1);
 assert.notStrictEqual(contactIdList4Cached, contactIdList1Cached);
 
-const f = cacheResultOf((xs, ys) => xs.concat(ys).sort());
-assert.strictEqual(f([1, 2, 3], [4, 5, 6]), f([1, 2], [3, 4, 5, 6]));
-
-console.log('All tests passed.')
+console.log('All tests passed.');
