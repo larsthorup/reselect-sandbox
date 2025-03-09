@@ -16,9 +16,9 @@ const selectContactIdListCached = createSelector(
     return R.sortBy(R.prop('name'), R.values(contact)).map(R.prop('id'));
   },
   {
-    memoizeOptions: { 
+    memoizeOptions: {
       // Note: return previous result if the new result is equal to previous result
-      resultEqualityCheck: shallowEqual 
+      resultEqualityCheck: shallowEqual,
     },
   }
 );
@@ -82,5 +82,29 @@ const contactIdList4Cached = selectContactIdListCached(state4);
 // Then select returns a DIFFERENT value
 assert.notStrictEqual(contactIdList4, contactIdList1);
 assert.notStrictEqual(contactIdList4Cached, contactIdList1Cached);
+
+const selectContactInfo = createSelector(
+  (state, id) => state.contact[id],
+  (contact) => {
+    // console.log(contact);
+    return { nameLength: contact.name.length };
+  }
+);
+
+const contactInfo1 = selectContactInfo(state4, '1');
+const contactInfo2 = selectContactInfo(state4, '2');
+assert.deepEqual(contactInfo2, { nameLength: 15 });
+
+// The selector caches the result per id (props), because of weakMapMemoize (default)
+const contactInfo1Cached = selectContactInfo(state4, '1');
+assert.strictEqual(contactInfo1, contactInfo1Cached);
+
+const state5 = R.assocPath(['contact', '3', 'name'], 'Bent', state4);
+const contactInfo3 = selectContactInfo(state5, '3');
+assert.deepEqual(contactInfo3, { nameLength: 4 });
+
+// The selector caches the result when no args have changed
+const contactInfo1Cached2 = selectContactInfo(state5, '1');
+assert.strictEqual(contactInfo1, contactInfo1Cached2);
 
 console.log('All tests passed.');
